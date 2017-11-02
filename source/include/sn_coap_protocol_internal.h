@@ -181,9 +181,12 @@ typedef NS_LIST_HEAD(coap_duplication_info_s, link) coap_duplication_info_list_t
 /* Structure which is stored to Linked list for blockwise messages sending purposes */
 typedef struct coap_blockwise_msg_ {
     uint32_t            timestamp;  /* Tells when Blockwise message is stored to Linked list */
+    uint16_t            original_msg_id; /* Initial message id */
 
     sn_coap_hdr_s       *coap_msg_ptr;
     struct coap_s       *coap;      /* CoAP library handle */
+
+    sn_coap_blockwise_context_s *context;
 
     ns_list_link_t     link;
 } coap_blockwise_msg_s;

@@ -144,6 +144,7 @@ int16_t sn_coap_builder_2(uint8_t *dst_packet_data_ptr, sn_coap_hdr_s *src_coap_
         /* * * * * * * * * * * * * * * * * * */
         sn_coap_builder_payload_build(&dst_packet_data_ptr, src_coap_msg_ptr);
     }
+    tr_info("built bytes was %d", dst_packet_data_ptr - base_packet_data_ptr);
     /* * * * Return built Packet data length * * * */
     return (dst_packet_data_ptr - base_packet_data_ptr);
 }

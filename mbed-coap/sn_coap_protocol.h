@@ -224,6 +224,26 @@ extern void sn_coap_protocol_remove_sent_blockwise_message(struct coap_s *handle
  */
 extern int8_t sn_coap_protocol_delete_retransmission(struct coap_s *handle, uint16_t msg_id);
 
+
+/**
+ * \fn int16_t sn_coap_protocol_prepare_blockwise_stream(struct coap_s *handle,
+ *                                                       sn_coap_hdr_s *src_coap_msg_ptr,
+ *                                                       sn_coap_blockwise_context_s *blockwise_context)
+ *
+ * \param *handle Pointer to CoAP library handle
+ * \param *src_coap_msg_ptr Pointer to a sn_coap_hdr_s struct containing the coap message
+ * \param *blockwise_context Pointer to sn_coap_blockwise_context_s struct containing the blockwise streaming
+ *                           context
+ * \return returns 0 on success, -1 for invalid parameter, -2 if payload could not be
+ *         retrieved or buffer allocation failed
+ *
+ * \brief If blockwising is enabled this function can be used to initiate a blockwise streaming request.
+ */
+extern int8_t sn_coap_protocol_prepare_blockwise_stream(struct coap_s *handle,
+                                                        sn_coap_hdr_s *src_coap_msg_ptr,
+                                                        sn_coap_blockwise_context_s *blockwise_context);
+
+
 /**
  * \fn int8_t sn_coap_convert_block_size(uint16_t block_size)
  *

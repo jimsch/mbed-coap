@@ -259,6 +259,11 @@ typedef struct registration_info_ {
     uint8_t *links_ptr;             /**< Resource registration string */
 } registration_info_t;
 
+typedef struct sn_coap_blockwise_context_ {
+    uint8_t (*blockwise_payload_get)(uint32_t block_number, uint16_t block_size, /*out*/ uint16_t *payload_len, /*out*/ uint8_t **payload_ptr, void* user_context);
+    void    (*blockwise_payload_free)(uint32_t block_number, uint8_t *payload, void* user_context);
+    void    *user_context;
+} sn_coap_blockwise_context_s;
 
 /**
  * \brief Address type of given address
