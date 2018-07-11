@@ -1776,7 +1776,7 @@ static sn_coap_hdr_s *sn_coap_handle_blockwise_message(struct coap_s *handle, sn
 
                     if (src_coap_blockwise_ack_msg_ptr->options_list_ptr) {
                         src_coap_blockwise_ack_msg_ptr->options_list_ptr->block1 = COAP_OPTION_BLOCK_NONE;
-                        src_coap_blockwise_ack_msg_ptr->options_list_ptr->block2 = COAP_OPTION_BLOCK_NONE;
+                        //src_coap_blockwise_ack_msg_ptr->options_list_ptr->block2 = COAP_OPTION_BLOCK_NONE;
                     } else {
                         if (!sn_coap_parser_alloc_options(handle, src_coap_blockwise_ack_msg_ptr)) {
                             tr_error("sn_coap_handle_blockwise_message - (send block1) failed to allocate ack message!");
@@ -1803,6 +1803,13 @@ static sn_coap_hdr_s *sn_coap_handle_blockwise_message(struct coap_s *handle, sn
                         src_coap_blockwise_ack_msg_ptr->payload_len = block_size;
                         src_coap_blockwise_ack_msg_ptr->payload_ptr = src_coap_blockwise_ack_msg_ptr->payload_ptr + (block_size * block_number);
                     }
+
+                    /* Copy block2 from stored blockwise message */
+                    if (stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr &&
+                        stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr->block2 != -1) {
+                        src_coap_blockwise_ack_msg_ptr->options_list_ptr->block2 = stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr->block2;
+                    }
+
                     /* Build and send block message */
                     dst_packed_data_needed_mem = sn_coap_builder_calc_needed_packet_data_size_2(src_coap_blockwise_ack_msg_ptr, handle->sn_coap_block_data_size);
 
@@ -2254,6 +2261,12 @@ static sn_coap_hdr_s *sn_coap_handle_blockwise_message(struct coap_s *handle, sn
                     src_coap_blockwise_ack_msg_ptr->options_list_ptr->block2 |= 0x08;
                     src_coap_blockwise_ack_msg_ptr->payload_len = block_size;
                     src_coap_blockwise_ack_msg_ptr->payload_ptr = stored_blockwise_msg_temp_ptr->coap_msg_ptr->payload_ptr + (block_size * block_number);
+                }
+
+                /* Copy block2 from stored blockwise message */
+                if (stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr &&
+                    stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr->block2 != -1) {
+                    src_coap_blockwise_ack_msg_ptr->options_list_ptr->block2 = stored_blockwise_msg_temp_ptr->coap_msg_ptr->options_list_ptr->block2;
                 }
 
                 /* Update token to match one which is in GET request.
